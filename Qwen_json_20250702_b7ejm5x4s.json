@@ -2,6 +2,15 @@
     {"nome": "Prato Executivo", "preco": 20.00, "estoque": 30},
     {"nome": "Marmita", "preco": 20.00, "estoque": 25},
     {"nome": "Batatas Fritas", "preco": 29.99, "estoque": 20},
+    {"nome": "Frango a Passarinho", "preco": 35.00, "estoque": 15},
+    {"nome": "Croquete de Costela Recheada", "preco": 39.99, "estoque": 10},
+    {"nome": "Mandioca Frita", "preco": 25.00, "estoque": 20},
     {"nome": "Antarctica", "preco": 4.50, "estoque": 50},
-    {"nome": "Caipirinha", "preco": 9.99, "estoque": 15}
+    {"nome": "Heineken", "preco": 6.00, "estoque": 30},
+    {"nome": "Coca-Cola", "preco": 12.00, "estoque": 40},
+    {"nome": "Guaraná Mineiro", "preco": 8.00, "estoque": 35},
+    {"nome": "Energético", "preco": 17.00, "estoque": 20},
+    {"nome": "Suco La Fruit", "preco": 8.80, "estoque": 25},
+    {"nome": "Caipirinha", "preco": 9.99, "estoque": 15},
+    {"nome": "Caipirosca", "preco": 9.99, "estoque": 15}
 ]
