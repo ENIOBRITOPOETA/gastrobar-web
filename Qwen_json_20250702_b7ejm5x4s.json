@@ -1,0 +1,7 @@
+[
+    {"nome": "Prato Executivo", "preco": 20.00, "estoque": 30},
+    {"nome": "Marmita", "preco": 20.00, "estoque": 25},
+    {"nome": "Batatas Fritas", "preco": 29.99, "estoque": 20},
+    {"nome": "Antarctica", "preco": 4.50, "estoque": 50},
+    {"nome": "Caipirinha", "preco": 9.99, "estoque": 15}
+]
