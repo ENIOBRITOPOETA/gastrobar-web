@@ -1,16 +1,57 @@
 [
-    {"nome": "Prato Executivo", "preco": 20.00, "estoque": 30},
-    {"nome": "Marmita", "preco": 20.00, "estoque": 25},
-    {"nome": "Batatas Fritas", "preco": 29.99, "estoque": 20},
-    {"nome": "Frango a Passarinho", "preco": 35.00, "estoque": 15},
-    {"nome": "Croquete de Costela Recheada", "preco": 39.99, "estoque": 10},
-    {"nome": "Mandioca Frita", "preco": 25.00, "estoque": 20},
-    {"nome": "Antarctica", "preco": 4.50, "estoque": 50},
-    {"nome": "Heineken", "preco": 6.00, "estoque": 30},
-    {"nome": "Coca-Cola", "preco": 12.00, "estoque": 40},
-    {"nome": "Guaraná Mineiro", "preco": 8.00, "estoque": 35},
-    {"nome": "Energético", "preco": 17.00, "estoque": 20},
-    {"nome": "Suco La Fruit", "preco": 8.80, "estoque": 25},
-    {"nome": "Caipirinha", "preco": 9.99, "estoque": 15},
-    {"nome": "Caipirosca", "preco": 9.99, "estoque": 15}
+import streamlit as st
+import pandas as pd
+
+# Função para inicializar os produtos
+def inicializar_produtos():
+    # Coloque a lista de produtos diretamente no código.
+    # Esta é a forma mais simples de garantir que eles sempre estarão disponíveis.
+    produtos = [
+        {"nome": "Prato Executivo", "preco": 20.00, "estoque": 30},
+        {"nome": "Marmita", "preco": 20.00, "estoque": 25},
+        {"nome": "Batatas Fritas", "preco": 29.99, "estoque": 20},
+        {"nome": "Frango a Passarinho", "preco": 35.00, "estoque": 15},
+        {"nome": "Croquete de Costela Recheada", "preco": 39.99, "estoque": 10},
+        {"nome": "Mandioca Frita", "preco": 25.00, "estoque": 20},
+        {"nome": "Antarctica", "preco": 4.50, "estoque": 50},
+        {"nome": "Heineken", "preco": 6.00, "estoque": 30},
+        {"nome": "Coca-Cola", "preco": 12.00, "estoque": 40},
+        {"nome": "Guaraná Mineiro", "preco": 8.00, "estoque": 35},
+        {"nome": "Energético", "preco": 17.00, "estoque": 20},
+        {"nome": "Suco La Fruit", "preco": 8.80, "estoque": 25},
+        {"nome": "Caipirinha", "preco": 9.99, "estoque": 15},
+        {"nome": "Caipirosca", "preco": 9.99, "estoque": 15}
+    ]
+    return produtos
+
+# Título do App
+st.title("🍽️ Gastro Bar Soberano Paladar")
+
+# Carrega os produtos
+# Usamos o st.session_state para que os dados não se percam a cada interação do usuário
+if 'produtos_df' not in st.session_state:
+    lista_de_produtos = inicializar_produtos()
+    st.session_state.produtos_df = pd.DataFrame(lista_de_produtos)
+
+# Verifica se a lista de produtos está vazia
+if st.session_state.produtos_df.empty:
+    st.warning("⚠️ Nenhum produto cadastrado.")
+else:
+    st.header("Registro de Pedidos")
+    
+    # Pega a lista de nomes de produtos para o selectbox
+    lista_nomes_produtos = st.session_state.produtos_df['nome'].tolist()
+    
+    produto_selecionado = st.selectbox("Selecione um produto:", lista_nomes_produtos)
+    quantidade = st.number_input("Quantidade:", min_value=1, value=1)
+
+    if st.button("Registrar Pedido"):
+        # Aqui você adicionaria a lógica para registrar o pedido e atualizar o estoque
+        st.success(f"Pedido de {quantidade}x {produto_selecionado} registrado com sucesso!")
+
+# Exibe o estoque atualizado
+st.header("📦 Estoque Atualizado")
+st.dataframe(st.session_state.produtos_df)
+
+
 ]
