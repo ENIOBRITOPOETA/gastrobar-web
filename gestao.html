@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestão de Estoque</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+    .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1, h2 { color: #d35400; }
+    input, select, button { padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; width: 100%; }
+    button { background: #e67e22; color: white; border: none; cursor: pointer; font-size: 16px; }
+    button:hover { background: #d35400; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background: #f8e9d7; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📦 Gestão de Estoque</h1>
+
+    <h2>Cadastrar Produto</h2>
+    <form id="formProduto">
+      <input type="text" id="nomeProduto" placeholder="Nome do produto" required />
+      <select id="tipoProduto">
+        <option value="Bebida">Bebida</option>
+        <option value="Alimento">Alimento</option>
+        <option value="Insumo">Insumo</option>
+      </select>
+      <input type="text" id="unidadeProduto" placeholder="Unidade (ex: garrafa, kg)" required />
+      <button type="submit">Cadastrar</button>
+    </form>
+
+    <h2>Lista de Produtos</h2>
+    <table id="tabelaProdutos">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Unidade</th>
+          <th>Estoque</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+    let entradas = JSON.parse(localStorage.getItem('entradas')) || [];
+    let saidas = JSON.parse(localStorage.getItem('saidas')) || [];
+
+    function salvar() {
+      localStorage.setItem('produtos', JSON.stringify(produtos));
+      localStorage.setItem('entradas', JSON.stringify(entradas));
+      localStorage.setItem('saidas', JSON.stringify(saidas));
+    }
+
+    function atualizarTabela() {
+      const tbody = document.querySelector('#tabelaProdutos tbody');
+      tbody.innerHTML = '';
+
+      produtos.forEach(p => {
+        const entrada = entradas.filter(e => e.idProd === p.id).reduce((sum, e) => sum + e.qtd, 0);
+        const saida = saidas.filter(s => s.idProd === p.id).reduce((sum, s) => sum + s.qtd, 0);
+        const estoque = entrada - saida;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.nome}</td>
+          <td>${p.tipo}</td>
+          <td>${p.unidade}</td>
+          <td><strong>${estoque}</strong></td>
+          <td>
+            <button onclick="registrarEntrada(${p.id})">+ Entrada</button>
+            <button onclick="registrarSaida(${p.id})">- Saída</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('formProduto').addEventListener('submit', e => {
+      e.preventDefault();
+      const nome = document.getElementById('nomeProduto').value;
+      const tipo = document.getElementById('tipoProduto').value;
+      const unidade = document.getElementById('unidadeProduto').value;
+
+      produtos.push({ id: Date.now(), nome, tipo, unidade });
+      salvar();
+      document.getElementById('formProduto').reset();
+      atualizarTabela();
+    });
+
+    window.registrarEntrada = function(id) {
+      const qtd = prompt('Quantidade de entrada:');
+      if (qtd && !isNaN(qtd) && qtd > 0) {
+        entradas.push({ id: Date.now(), idProd: id, qtd: Number(qtd), data: new Date().toLocaleString() });
+        salvar();
+        atualizarTabela();
+      }
+    };
+
+    window.registrarSaida = function(id) {
+      const qtd = prompt('Quantidade de saída:');
+      if (qtd && !isNaN(qtd) && qtd > 0) {
+        saidas.push({ id: Date.now(), idProd: id, qtd: Number(qtd), data: new Date().toLocaleString() });
+        salvar();
+        atualizarTabela();
+      }
+    };
+
+    atualizarTabela();
+  </script>
+</body>
+</html>
