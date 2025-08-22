@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Atendimento - Gastro Bar</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+    .container { max-width: 1000px; margin: auto; display: flex; gap: 20px; flex-wrap: wrap; }
+    .clientes, .detalhes { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .clientes { flex: 1; min-width: 250px; }
+    .detalhes { flex: 2; min-width: 400px; }
+    .cliente-item { padding: 10px; background: #fef8f0; margin: 5px 0; border-radius: 5px; cursor: pointer; }
+    .cliente-item strong { color: #c0392b; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background: #f8e9d7; }
+    .total { font-weight: bold; color: #27ae60; text-align: right; margin-top: 10px; }
+    input, select, button { padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; width: 100%; }
+    button { background: #e67e22; color: white; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Lista de Clientes -->
+    <div class="clientes">
+      <h2>👥 Clientes</h2>
+      <button onclick="novoCliente()">+ Novo Cliente</button>
+      <div id="listaClientes"></div>
+    </div>
+
+    <!-- Detalhes da Conta -->
+    <div class="detalhes">
+      <div id="telaInicial">
+        <h2>Selecione um cliente</h2>
+        <p>Clique na lista para ver ou adicionar pedidos.</p>
+      </div>
+      <div id="telaCliente" style="display: none;">
+        <h2>Conta de <span id="nomeCliente"></span></h2>
+        <h3>Adicionar Pedido</h3>
+        <select id="produtoPedido"></select>
+        <input type="number" id="quantidadePedido" value="1" min="1" />
+        <button onclick="adicionarPedido()">Adicionar</button>
+
+        <h3>Pedidos</h3>
+        <table id="tabelaPedidos">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Qtd</th>
+              <th>Total</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="total">Total: R$ <span id="totalConta">0,00</span></div>
+        <button onclick="fecharConta()">✅ Fechar Conta</button>
+        <button onclick="removerCliente()">🗑️ Remover Cliente</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+    let produtos = [
+      { id: 1, nome: 'Cerveja', preco: 12.50 },
+      { id: 2, nome: 'Vinho', preco: 25.00 },
+      { id: 3, nome: 'Porção', preco: 22.00 },
+      { id: 4, nome: 'Refrigerante', preco: 6.00 },
+      { id: 5, nome: 'Água', preco: 4.00 }
+    ];
+
+    function salvar() {
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+    }
+
+    function atualizarLista() {
+      const div = document.getElementById('listaClientes');
+      div.innerHTML = '';
+      clientes.forEach(c => {
+        const el = document.createElement('div');
+        el.className = 'cliente-item';
+        el.innerHTML = `<strong>${c.nome}</strong> (${c.pedidos.length} itens)`;
+        el.onclick = () => abrirCliente(c.id);
+        div.appendChild(el);
+      });
+    }
+
+    function novoCliente() {
+      const nome = prompt('Nome do cliente:');
+      if (nome) {
+        clientes.push({ id: Date.now(), nome, pedidos: [] });
+        salvar();
+        atualizarLista();
+      }
+    }
+
+    function abrirCliente(id) {
+      const cliente = clientes.find(c => c.id === id);
+      if (!cliente) return;
+      document.getElementById('telaInicial').style.display = 'none';
+      document.getElementById('telaCliente').style.display = 'block';
+      window.clienteId = id;
+      document.getElementById('nomeCliente').textContent = cliente.nome;
+      atualizarTabelaPedidos(cliente);
+      preencherProdutos();
+    }
+
+    function preencherProdutos() {
+      const select = document.getElementById('produtoPedido');
+      select.innerHTML = '';
+      produtos.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.nome} (R$ ${p.preco.toFixed(2)})`;
+        select.appendChild(opt);
+      });
+    }
+
+    function adicionarPedido() {
+      const cliente = clientes.find(c => c.id === window.clienteId);
+      const prodId = Number(document.getElementById('produtoPedido').value);
+      const qtd = Number(document.getElementById('quantidadePedido').value);
+      const produto = produtos.find(p => p.id === prodId);
+      if (produto && qtd > 0) {
+        cliente.pedidos.push({ prodId, qtd, preco: produto.preco });
+        salvar();
+        atualizarTabelaPedidos(cliente);
+      }
+    }
+
+    function atualizarTabelaPedidos(cliente) {
+      const tbody = document.querySelector('#tabelaPedidos tbody');
+      tbody.innerHTML = '';
+      let total = 0;
+      (cliente.pedidos || []).forEach((p, i) => {
+        const valor = p.preco * p.qtd;
+        total += valor;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${produtos.find(prod => prod.id === p.prodId)?.nome}</td>
+          <td>${p.qtd}</td>
+          <td>R$ ${valor.toFixed(2)}</td>
+          <td><button onclick="removerPedido(${i})">Excluir</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('totalConta').textContent = total.toFixed(2).replace('.', ',');
+    }
+
+    window.removerPedido = function(i) {
+      const cliente = clientes.find(c => c.id === window.clienteId);
+      cliente.pedidos.splice(i, 1);
+      salvar();
+      atualizarTabelaPedidos(cliente);
+    };
+
+    window.fecharConta = function() {
+      const cliente = clientes.find(c => c.id === window.clienteId);
+      let total = cliente.pedidos.reduce((sum, p) => sum + (p.preco * p.qtd), 0);
+      if (confirm(`Total: R$ ${total.toFixed(2)}\nConfirmar pagamento?`)) {
+        alert(`✅ Pagamento confirmado!`);
+        cliente.pedidos = []; // Zera os pedidos
+        salvar();
+        atualizarTabelaPedidos(cliente);
+      }
+    };
+
+    window.removerCliente = function() {
+      if (confirm('Deseja remover este cliente da lista?')) {
+        clientes = clientes.filter(c => c.id !== window.clienteId);
+        salvar();
+        document.getElementById('telaCliente').style.display = 'none';
+        document.getElementById('telaInicial').style.display = 'block';
+        atualizarLista();
+      }
+    };
+
+    window.onload = () => {
+      atualizarLista();
+    };
+  </script>
+</body>
+</html>
