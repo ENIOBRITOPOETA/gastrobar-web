@@ -1,20 +1,12 @@
-{
-  "name": "Gastro Bar Soberano",
-  "short_name": "Gastro Bar",
-  "start_url": "/gastrobar-web/",
-  "display": "standalone",
-  "background_color": "#f4f4f4",
-  "theme_color": "#e67e22",
-  "icons": [
-    {
-      "src": "imagens/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "imagens/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
+"icons": [
+  {
+    "src": "image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZTY3ZTIyIiBkPSJNMzg0IDM1MlYyMjQuOCAzODQuIDIyNC44IDM4NC4gMjI0LjggMzg0IDM1MiAzODQgMzUyWiIvPjxwYXRoIGZpbGw9IiNkMzU0MDAiIGQ9Ik0xMjggMzUyVjIyNC44IDEyOC4gMjI0LjggMTI4IDIyNC44IDEyOCAzNTIgMTI4IDM1MlpNMzg0IDEyOFYxMjggMzg0IDEyOCAzODQgMTI4IDM4NCAxMjggMzg0IDEyOFoiLz48cGF0aCBmaWxsPSIjZTY3ZTIyIiBkPSJNMTI4IDM1MlYyMjQuOCAxMjguIDIyNC44IDEyOCAyMjQuOCAxMjggMzUyIDEyOCAzNTJaTTM4NCAxMjhdIi8+PHBhdGggZmlsbD0iI2QzNTQwMCIgZD0iTTEyOCAzNTJWMjI0LjggMTI4LjIyNC44IDEyOCAyMjQuOCAxMjggMzUyIDEyOCAzNTJaTTM4NCAxMjhdIi8+PC9zdmc+",
+    "sizes": "192x192",
+    "type": "image/png"
+  },
+  {
+    "src": "image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZTY3ZTIyIiBkPSJNMzg0IDM1MlYyMjQuOCAzODQuIDIyNC44IDM4NC4gMjI0LjggMzg0IDM1MiAzODQgMzUyWiIvPjxwYXRoIGZpbGw9IiNkMzU0MDAiIGQ9Ik0xMjggMzUyVjIyNC44IDEyOC4gMjI0LjggMTI4IDIyNC44IDEyOCAzNTIgMTI4IDM1MlpNMzg0IDEyOFYxMjggMzg0IDEyOCAzODQgMTI4IDM4NCAxMjggMzg0IDEyOFoiLz48cGF0aCBmaWxsPSIjZTY3ZTIyIiBkPSJNMTI4IDM1MlYyMjQuOCAxMjguIDIyNC44IDEyOCAyMjQuOCAxMjggMzUyIDEyOCAzNTJaTTM4NCAxMjhdIi8+PHBhdGggZmlsbD0iI2QzNTQwMCIgZD0iTTEyOCAzNTJWMjI0LjggMTI4LjIyNC44IDEyOCAyMjQuOCAxMjggMzUyIDEyOCAzNTJaTTM4NCAxMjhdIi8+PC9zdmc+",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
